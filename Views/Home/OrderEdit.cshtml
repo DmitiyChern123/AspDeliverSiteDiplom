@@ -1,0 +1,114 @@
+﻿@model WebApplication1.Models.OrdersViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
+
+<div style="display:flex" >
+
+@foreach (var status in Model.statuses)
+{
+  <ul>
+      <form action="@Url.Action("OrderEdit","Home")">
+            <input name="statusid" type="hidden" value="@status.Id"></input>
+          <button type="submit">@status.Name</button>
+      </form>
+        
+  </ul>
+
+}
+</div>
+
+<a asp-action="TestOrder" >Тестовый заказ</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Клиент</p>
+            </th>
+            <th>
+                <p>Тип оплаты</p>
+            </th>
+            <th>
+                <p>телефон</p>
+            </th>
+            <th>
+                <p>Адрес</p>
+            </th>
+            <th>
+                <p>статус</p>
+            </th>
+            <th>
+                <p>Курьер</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+                <td>
+                    <!--
+
+                    <a asp-action="MinusProduct" asp-route-id="@item.Id">Edit</a> |
+                    -->
+
+
+
+                    <form action="@Url.Action("changestatus","Home")" method="post">
+
+                        <input name="orderid" type="hidden" value="@item.Id">
+                        <select name="statusid">
+                       <option value="@item.Id">@item.Status.Name</option>
+                       @foreach (var status in Model.statuses.Where(d=>d.Id != item.StatusId).ToList())
+                        {
+                            <option value="@status.Id">@status.Name</option>
+                        }
+                    </select>
+                        <!--  @Html.ActionLink("✓","changestatus","Home", new{ orderid = item.Id},null)-->
+                        <button type="submit">✓</button>
+                    </form>
+
+
+                </td>
+                <td>
+                     <form action="@Url.Action("getCourirer","Home")" method="post">
+                        <input name="orderid" type="hidden" value="@item.Id">
+                        <select name="courierid">
+                            @if (item.Courier != null)
+                            {
+                                
+                                <option value="@item.Id">@item.Courier.Fio</option>
+                                <option value="@null">----</option>
+                            }
+                            else
+                            {
+                                <option value="@null">----</option>
+                            }
+                            @foreach (var courier in Model.courses.Where(d=>d.Id != item.CourierId))
+                        {
+                            <option value="@courier.Id">@courier.Fio</option>
+                        }
+                    </select>
+                        <button type="submit">✓</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

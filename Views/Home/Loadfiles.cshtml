@@ -1,0 +1,118 @@
+﻿@using WebApplication1.Entities2;
+@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "Upload Products";
+    <link rel="stylesheet" href="/css/table.css" />
+}
+
+<h2>Upload Products</h2>
+
+<form id="uploadForm" enctype="multipart/form-data" method="post">
+    <input type="file" id="jsonFile" name="jsonFile" accept=".json" />
+    <button type="submit">Upload</button>
+</form>
+
+<div id="productTable" style="display:none;">
+    <h3>Preview Products</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Grams</th>
+                <th>Calories</th>
+                <th>Category ID</th>
+                <th>Image</th>
+                <th>Product Types</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody">
+            <!-- Product rows will be added here dynamically -->
+        </tbody>
+    </table>
+    <button id="confirmButton">Confirm</button>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('jsonFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("No file selected.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('jsonFile', file);
+
+            try {
+                const response = await fetch('/Home/Preview', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const products = await response.json();
+                    const tableBody = document.getElementById('productTableBody');
+                    tableBody.innerHTML = '';
+
+                    products.forEach(product => {
+                        const productTypes = product.productTypes || product.ProductTypes;
+                        const productTypesHtml = productTypes.map(type => `
+                                    <div>
+                                        <strong>${type.name || type.Name}</strong><br>
+                                        Price: ${type.price || type.Price}<br>
+                                        ID: ${type.id || type.Id}
+                                    </div>
+                                `).join('');
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${product.name || product.Name}</td>
+                                                 <td>${product.opis || product.Opis}</td>
+                                                 <td>${product.price || product.Price}</td>
+                                                 <td>${product.grams || product.Grams}</td>
+                                                 <td>${product.calories || product.Calories}</td>
+                                                 <td>${product.idCategory || product.IdCategory}</td>
+                                                 <td>${product.img || product.Img}</td>
+                                                 <td>${productTypesHtml}</td>`;
+                        tableBody.appendChild(row);
+                    });
+
+                    document.getElementById('productTable').style.display = 'block';
+                } else {
+                    const errorText = await response.text();
+                    alert(`Error: ${errorText}`);
+                }
+            } catch (error) {
+                alert(`Fetch error: ${error.message}`);
+            }
+        };
+
+        document.getElementById('confirmButton').onclick = async function () {
+            try {
+                const response = await fetch('/Home/Confirm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Products successfully added to the database!');
+                    document.getElementById('productTable').style.display = 'none';
+                    document.getElementById('productTableBody').innerHTML = '';
+                } else {
+                    const errorText = await response.text();
+                    alert(`Error: ${errorText}`);
+                }
+            } catch (error) {
+                alert(`Fetch error: ${error.message}`);
+            }
+        };
+    </script>
+}

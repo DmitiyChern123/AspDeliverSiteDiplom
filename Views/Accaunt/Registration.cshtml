@@ -1,0 +1,30 @@
+﻿@model RegistrarionViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    @using WebApplication1;
+    @using WebApplication1.Models;
+    <link rel="stylesheet" href="/css/Login.css" />
+}
+<form method="post" class="login-form" asp-action="N-ewRegistration">
+<h1>Создание аккаунта:</h1>
+    <div class="form-input-material">
+
+    <label asp-for="Name" for="Name">Имя:</label>
+    <input asp-for="Name" name="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    <label asp-for="Login" for="Login">Логин:</label>
+    <input asp-for="Login" name="Login" />
+    <span asp-validation-for="Login" class="text-danger"></span>
+    <label asp-for="Password" for="password">Пароль:</label>
+    <input asp-for="Password" type="Password" name="Password" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <label asp-for="RePassword" for="password">повторите Пароль:</label>
+    <input asp-for="RePassword" type="Password" name="RePassword" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   
+    <input type="submit" value="Вход в систему" />
+    </div>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Accaunt" asp-action="Index">Назад</a>
+</form>

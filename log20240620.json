@@ -1,0 +1,4 @@
+{"Timestamp":"2024-06-20T17:58:36.7766911+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"24e48f080225b5298d6547d70e766301","SpanId":"a0dad302507f2910"}
+{"Timestamp":"2024-06-20T18:00:02.8154993+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"741482d9a137d59fd0cb94c8acde89a3","SpanId":"e23a188d3644594e"}
+{"Timestamp":"2024-06-20T18:35:58.8806219+05:00","Level":"Information","MessageTemplate":"Пользователь admin успешно вошел в систему в систему","TraceId":"236ba2428c8dfe533e8fee1d92b71b46","SpanId":"27c935bd9a0d125c"}
+{"Timestamp":"2024-06-20T18:40:15.0335747+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"fb77af94f3ae6fe238fbadc608383dda","SpanId":"315cdb06bf890388"}

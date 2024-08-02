@@ -1,0 +1,92 @@
+﻿@model EditProductViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <link rel="stylesheet" href="/css/Edit.css" />
+  
+}
+
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('imgPreview');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+
+
+<div class="main-containerr">
+
+
+
+
+<div class ="form-input-material">
+   
+@using (Html.BeginForm("EndEditing", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <label>ID:</label>
+        @Html.TextBoxFor(m => m.product.Id , new { @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.product.Id)
+    </div>
+    <div>
+        <label>Name:</label>
+        @Html.TextBoxFor(m => m.product.Name)
+                @Html.ValidationMessageFor(model => model.product.Name)
+    </div>
+    <div>
+        <label>Description:</label>
+        @Html.TextBoxFor(m => m.product.Opis)
+                @Html.ValidationMessageFor(model => model.product.Opis)
+    </div>
+    <div style="display:none" >
+                @Html.TextBoxFor(m => m.product.Img)
+    </div>
+    <div>
+        <label>Price:</label>
+        @Html.TextBoxFor(m => m.product.Price)
+                @Html.ValidationMessageFor(model => model.product.Price)
+    </div>
+
+
+
+            <div>
+                <div>
+                    <label asp-for="ImgFile"></label>
+                    <input asp-for="ImgFile" accept=".jpg" onchange="previewImage(event)" type="file" />
+                    
+
+                    <span asp-validation-for="ImgFile" class="text-danger"></span>
+                </div>
+            </div>
+            <img height="250" width="250" id="imgPreview" src="../@Model.product.Img" alt="Image Preview" />
+    <div>
+        <label>Category:</label>
+        @Html.DropDownListFor(
+    m => m.selcat,
+    new SelectList(Model.categories, "Id", "Name"),
+    "-- Select Category --",
+    new { id = "txtIdCategory" }
+    )
+    </div>
+            <div>
+                <label>Скрыть?:</label>
+                @Html.CheckBox("product.Is_hidden", Model.product.Is_hidden)
+                
+            </div>
+    <input type="submit" value="Save" />
+
+
+           
+}
+</div>
+  
+</div>
+

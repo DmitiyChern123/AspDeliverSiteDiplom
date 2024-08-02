@@ -1,0 +1,5 @@
+{"Timestamp":"2024-06-13T17:43:32.2613263+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"c66cde1900fa0b62307d13e67e00cca1","SpanId":"56129f1e474574a6"}
+{"Timestamp":"2024-06-13T18:23:41.2315969+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"9160df71684c60a59fcef48fa503b6d3","SpanId":"cf06bc11cd1b726d"}
+{"Timestamp":"2024-06-13T18:45:55.7101299+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"79ebf8c7feda36e8f41a166359b2c91e","SpanId":"a24f6ada3df5fd5b"}
+{"Timestamp":"2024-06-13T21:15:36.8645277+05:00","Level":"Information","MessageTemplate":"Пользователь manager успешно вошел в систему в систему","TraceId":"8210fcb4e73386bbbb663646edad9f25","SpanId":"cddddc1233f79ce8"}
+{"Timestamp":"2024-06-13T21:16:00.0557979+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"710a5a1702bc958a1a70217f6f20ba79","SpanId":"354dca65381c605c"}

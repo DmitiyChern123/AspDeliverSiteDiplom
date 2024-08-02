@@ -1,0 +1,351 @@
+﻿/*
+    ================================
+        Best Viewed In Full Page
+https://codepen.io/AbubakerSaeed/pen/QWjYYmB
+    ================================
+*/
+
+/* Change slides by clicking on those grayish lines using mouse, can use keyboard arrows too :) */
+
+/* It's not responsive, so check it out in big/large screen */
+
+/* FONT */
+/* ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
+.slider-continer {
+
+    width: 95%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.slider {
+
+    width:100%;
+    align-items: center;
+    justify-content: center;
+}
+/* DEFAULTS */
+/* ========================================================================== */
+.slider body {
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: hsl(0 0% 98%);
+    font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+.slider h1 {
+    color: hsla(32 50% 50% / .8);
+    position: fixed;
+    left: -100px;
+    top: 50%;
+    margin: 0;
+    transform: rotate(-90deg) translateY(-50%);
+}
+
+
+/* C */
+/* ========================================================================== */
+.slider .c {
+    min-width: 400px;
+    width: 100%;
+    height: 500px;
+    border-radius: 12px;
+    padding: 20px;
+    padding-bottom: 40px;
+    box-shadow: 0 8px 48px 2px hsla(10 6% 15% / .4);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: hsl(0 0% 90%);
+    box-sizing: border-box;
+}
+
+.slider .ci {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: inherit;
+    transform-origin: left 50%;
+    background: inherit;
+    z-index: var(--z);
+    transition: .3s ease-out;
+}
+
+.slider .ci img {
+    width:100%;
+    -moz-user-select: none;
+    user-select: none;
+    height:100%;
+}
+
+.slider .ch {
+    position: absolute;
+    top: 70%;
+    left: 4%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: hsla(var(--h) var(--s) var(--l) / .8);
+    text-shadow: 0 2px 10px hsla(var(--h) var(--s) 10% / .3);
+}
+
+.slider input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: -10;
+}
+
+.slider label {
+    width: 10%;
+    height: 10px;
+    margin-right: 4px;
+    border-radius: 20px;
+    background: hsla(0 0% 90% / .3);
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+}
+
+    .slider label:last-child {
+        margin-right: 0;
+    }
+
+.slider input:checked + label {
+    background: linear-gradient(to right, hsla(var(--hue) 80% 70% / .7), hsla(calc(var(--hue) + 30) 80% 50% / .7));
+}
+
+.slider input:not(:checked) + label + .ci {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.slider input:checked + label + .ci ~ .ci {
+    transform: translateX(100%);
+}
+
+.slider input:not(:checked) + label + .ci {
+    transition: 0;
+}
+
+
+/* ABS */
+/* ========================================================================== */
+.slider .abs-site-link {
+    position: fixed;
+    z-index: 11;
+    bottom: 20px;
+    left: 20px;
+    color: hsla(32 50% 50% / .8);
+    font-size: 1.6rem;
+    font-weight: bold;
+    border-bottom: 3px solid currentColor;
+    text-decoration: none;
+    background-color: inherit;
+}
+
+.slider .abs-profiles {
+    position: fixed;
+    z-index: 10;
+    right: 20px;
+    bottom: 23px;
+    opacity: .8;
+
+}
+
+    .abs-profiles img {
+        filter: hue-rotate(71deg) brightness(1.1);
+    }
+
+    .abs-profiles a {
+        display: inline-block;
+        margin-left: 6px;
+    }
+@media (max-width: 500px) {
+
+    /*
+    ================================
+        Best Viewed In Full Page
+https://codepen.io/AbubakerSaeed/pen/QWjYYmB
+    ================================
+*/
+
+    /* Change slides by clicking on those grayish lines using mouse, can use keyboard arrows too :) */
+
+    /* It's not responsive, so check it out in big/large screen */
+
+    /* FONT */
+    /* ========================================================================== */
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
+
+    .slider-continer {
+        width: 95%;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider {
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+        /* DEFAULTS */
+        /* ========================================================================== */
+        .slider body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: hsl(0 0% 98%);
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+        }
+
+        .slider h1 {
+            color: hsla(32 50% 50% / .8);
+            position: fixed;
+            left: -100px;
+            top: 50%;
+            margin: 0;
+            transform: rotate(-90deg) translateY(-50%);
+        }
+
+
+        /* C */
+        /* ========================================================================== */
+        .slider .c {
+            margin-top:50px;
+            min-width: 400px;
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            padding: 20px;
+            padding-bottom: 40px;
+            box-shadow: 0 8px 48px 2px hsla(10 6% 15% / .4);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: hsl(0 0% 90%);
+            box-sizing: border-box;
+        }
+
+        .slider .ci {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: inherit;
+            transform-origin: left 50%;
+            background: inherit;
+            z-index: var(--z);
+            transition: .3s ease-out;
+        }
+
+            .slider .ci img {
+                width: 100%;
+                -moz-user-select: none;
+                user-select: none;
+                height: 100%;
+            }
+
+        .slider .ch {
+            position: absolute;
+            top: 70%;
+            left: 4%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: hsla(var(--h) var(--s) var(--l) / .8);
+            text-shadow: 0 2px 10px hsla(var(--h) var(--s) 10% / .3);
+        }
+
+        .slider input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            z-index: -10;
+        }
+
+        .slider label {
+            width: 10%;
+            height: 10px;
+            margin-right: 4px;
+            border-radius: 20px;
+            background: hsla(0 0% 90% / .3);
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+            .slider label:last-child {
+                margin-right: 0;
+            }
+
+        .slider input:checked + label {
+            background: linear-gradient(to right, hsla(var(--hue) 80% 70% / .7), hsla(calc(var(--hue) + 30) 80% 50% / .7));
+        }
+
+        .slider input:not(:checked) + label + .ci {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .slider input:checked + label + .ci ~ .ci {
+            transform: translateX(100%);
+        }
+
+        .slider input:not(:checked) + label + .ci {
+            transition: 0;
+        }
+
+
+        /* ABS */
+        /* ========================================================================== */
+        .slider .abs-site-link {
+            position: fixed;
+            z-index: 11;
+            bottom: 20px;
+            left: 20px;
+            color: hsla(32 50% 50% / .8);
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-bottom: 3px solid currentColor;
+            text-decoration: none;
+            background-color: inherit;
+        }
+
+        .slider .abs-profiles {
+            position: fixed;
+            z-index: 10;
+            right: 20px;
+            bottom: 23px;
+            opacity: .8;
+        }
+
+    .abs-profiles img {
+        filter: hue-rotate(71deg) brightness(1.1);
+    }
+
+    .abs-profiles a {
+        display: inline-block;
+        margin-left: 6px;
+    }
+
+}

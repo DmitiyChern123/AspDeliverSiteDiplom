@@ -1,0 +1,42 @@
+﻿/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+
+
+.about {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-img {
+    max-width: 30%;
+    height: auto;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.about-text {
+    max-width: 600px;
+    margin: 20px;
+}
+
+    .about-text h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .about-text p {
+        margin: 10px 0;
+        line-height: 1.6;
+    }
+

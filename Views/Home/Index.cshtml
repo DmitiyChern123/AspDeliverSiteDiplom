@@ -1,0 +1,414 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/Slider.css" />
+ 
+    var isAdmin =  User.IsInRole("Admin");
+}
+@using Microsoft.AspNetCore.Identity;
+@using WebApplication1.Models;
+@using WebApplication1.Entities2;
+@model HomeModel
+
+
+
+
+
+@if (User.IsInRole("admin"))
+{
+    @Html.ActionLink("Добавить товар","CreateOrEditProduct","Home", new{ productId = 0},null)
+    <p></p>
+    @Html.ActionLink("лог-сообщения","LoggerPage","Home")
+    <p></p>
+    @Html.ActionLink("загрузка через файл","Loadfiles","Home")
+}
+<!--
+
+ <form method="get" role="search" class="search-form">
+        <input type="text" name="searchQuery" value="@Model.SearchQuery" placeholder="Search by product name" class="search-input" />
+        <input type="submit" value="go" class="search-submit" />
+    </form>
+-->
+<div class="slider-continer">
+
+    <div class="slider">
+        <div class="c">
+
+            <input type="radio" name="a" id="cr-1" checked>
+            <label for="cr-1" style="--hue: 32"></label>
+            <div class="ci" style="--z: 4">
+              
+                <img src="~/images/promotion/banner_na_sayt_dostvka.jpg" alt="Snow on leafs">
+            </div>
+
+            <input type="radio" name="a" id="cr-2">
+            <label for="cr-2" style="--hue: 82"></label>
+            <div class="ci" style="--z: 3">
+            
+                <img src="~/images/promotion/banner2.jpg" alt="Trees">
+            </div>
+
+            <input type="radio" name="a" id="cr-3">
+            <label for="cr-3" style="--hue: 40"></label>
+            <div class="ci" style="--z: 2">
+               
+                <img src="~/images/promotion/banner3.jpg" alt="Mountains and houses">
+            </div>
+
+            
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+<div class="container">
+    <div class="header-container">
+        <ul class="category-list" id="categoryList">
+
+            <li class="catelement">
+
+                <a href="@Url.Action("Index", new { categoryId = -1, sortOrder = Model.SortOrder, searchQuery = Model.SearchQuery })">
+                    все
+                </a>
+                <img src="https://www.svgrepo.com/show/367847/matrix.svg" />
+            </li>
+
+            @foreach (var category in Model.Categories)
+            {
+                <li class="catelement">
+
+                    <a href="@Url.Action("Index", new { categoryId = category.Id, sortOrder = Model.SortOrder, searchQuery = Model.SearchQuery })">
+                        @category.Name
+                    </a>
+                    <img src="@category.Img" alt="@category.Name" />
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>
+
+<div>
+</div>
+<div class="product-cards">
+    @foreach (var categ in Model.Categories)
+    {
+        if (Model.Products.Where(d => d.IdCategory == categ.Id).ToList().Count > 0)
+        {
+
+            <h1 style="width: 100%;">@categ.Name</h1> <p></p>
+        }
+        <div class="product-grid">
+            @foreach (Product product in Model.Products.Where(d => d.IdCategory == categ.Id).Where(d=>d.Is_hidden==false))
+            {
+                <div class="product-card">
+                    <div class="trasf-div">
+
+                        <div class="image-container">
+
+                            <img class="product-img" src="@product.Img" />
+                            
+                        </div>
+                        <div class="product-inform">
+                            <h1 >@product.Name </h1>
+                            
+                            <div style="display:flex;align-items:center;padding:5px;justify-content:space-between;margin-bottom:2%;">
+                                @if (User.IsInRole("admin"))
+                                {
+                                    @Html.ActionLink("Ред. товар","CreateOrEditProduct","Home", new{ productId = product.Id},null)
+                                    <p></p>
+                                    @Html.ActionLink("Ред. Тип товара","EditTypes","Home", new{ productId = product.Id},null)
+                                }
+                                        <h3 class="cardprice" >@product.Price Руб</h3>
+
+                               
+                                <p class="button-33 show-details-btn">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/69/69986.png" >
+                                </p>
+                                
+                            </div>
+
+                            <div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="additional-info" style="display: none;">
+                        <div class="additional_container">
+                            <div class="additional-image">
+                                <img src="@product.Img" />
+                            </div>
+                            <div class="additional-content">
+                                <div class="header-content">
+                                    <h1>@product.Name</h1>
+                                   
+                                </div>
+                                <h2>@product.Opis</h2>
+                                <h3>@product.Grams</h3>
+                                <h4>@product.Calories</h4>
+                                <div class="bottom-container-card">
+                                    <form action="@Url.Action("AddProduct", "Home")" method="post">
+                                        <div class="bottom-container-card-form">
+                                            <input type="hidden" name="productId" value="@product.Id" />
+                                            <div class="dropdownlist">
+                                                <p>Выбрать вариант:</p>
+                                                <select name="propertyId" id="propertyId">
+                                                    @foreach (var propety in product.ProductTypes.Where(d => d.Is_delated != true).ToList())
+                                                    {
+                                                        if (!Model.hasinkorzina.Contains(propety))
+                                                        {
+                                                            <option data-price="@propety.Price" value="@propety.Id">@propety.Name │ @propety.Price руб</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option data-price="@propety.Price" disabled value="@propety.Id">@propety.Name │ @propety.Price руб ✔ </option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <p style="visibility:hidden">
+                                                @foreach (var propety in product.ProductTypes)
+                                                {
+                                                    if (!Model.hasinkorzina.Contains(propety))
+                                                    {
+                                                        <h3 id="price">@propety.Price руб</h3>
+                                                        break;
+                                                    }
+                                                }
+                                            </p>
+                                            <button class="button-4" type="submit">добавить в корзину</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+           
+
+        </div>
+    }
+     @if (User.IsInRole("admin"))
+            {
+        <p style="width:100%"></p>
+        <h1>Скрытый товар:</h1>
+        <p style="width:100%"></p>
+
+        @foreach (Product product in Model.Products.Where(d => d.Is_hidden == true))
+        {
+            <div class="product-card">
+                <div class="trasf-div">
+
+                    <div class="image-container">
+
+                        <img class="product-img" src="@product.Img" />
+
+                    </div>
+                    <div class="product-inform">
+                        <h1>@product.Name </h1>
+
+                        <div style="display:flex;align-items:center;padding:5px;justify-content:space-between;margin-bottom:2%;">
+                            @if (User.IsInRole("admin"))
+                            {
+                                @Html.ActionLink("Ред. товар","CreateOrEditProduct","Home", new{ productId = product.Id},null)
+                                <p></p>
+                                @Html.ActionLink("Ред. Тип товара","EditTypes","Home", new{ productId = product.Id},null)
+                            }
+                            <h3 class="fs-5 text-justify">@product.Price Руб</h3>
+
+
+                            <p class="button-33 show-details-btn">
+                                <img src="https://cdn-icons-png.flaticon.com/512/69/69986.png" style="height:15px;width:15px;">
+                            </p>
+
+                        </div>
+
+                        <div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="additional-info" style="display: none;">
+                    <div class="additional_container">
+
+                        <div class="additional-image">
+                            <img src="@product.Img" />
+                        </div>
+                        <div class="additional-content">
+                            <div style="flex-direction:row;display:flex;justify-content: space-between;">
+                                <h1 style="float: left;">@product.Name</h1>
+                                <img class="close" src="https://www.hexim.de/layout/ebay-mobile/close.png" />
+
+
+                            </div>
+
+                            <h2>@product.Opis</h2>
+                            <h3>@product.Grams</h3>
+                            <h4>@product.Calories</h4>
+
+                            <div class="bottom-container-card">
+
+
+
+                                <form action="@Url.Action("AddProduct", "Home")" method="post">
+                                    <div class="bottom-container-card-form">
+
+                                        <input type="hidden" name="productId" value="@product.Id" />
+                                        <div class="dropdownlist">
+
+                                            <p>Выбрать вариант:</p>
+                                            <select name="propertyId" id="propertyId">
+                                                @foreach (var propety in product.ProductTypes.Where(d => d.Is_delated != true).ToList())
+                                                {
+                                                    if (!Model.hasinkorzina.Contains(propety))
+                                                    {
+                                                        <option data-price="@propety.Price" value="@propety.Id">@propety.Name │ @propety.Price руб></option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option data-price="@propety.Price" disabled value="@propety.Id">@propety.Name │ @propety.Price руб ✔ </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <p style="visibility:hidden">
+                                            @foreach (var propety in product.ProductTypes)
+                                            {
+                                                if (!Model.hasinkorzina.Contains(propety))
+                                                {
+
+                                                    <h3 id="price">@propety.Price руб</h3>
+                                                    break;
+
+                                                }
+
+                                            }
+
+
+                                                </p>
+                                                <button class="button-4" type="submit">добавить в корзину</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+
+            }
+    <p></p>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('.catelement').click(function () {
+                var categoryId = $(this).data('category-id');
+                var sortOrder = $('#sortOrder').val();
+                var searchQuery = $('#searchQuery').val();
+
+                // Отправка AJAX-запроса на контроллер
+                $.ajax({
+                    url: '/YourController/YourAction',
+                    type: 'GET',
+                    data: { categoryId: categoryId, sortOrder: sortOrder, searchQuery: searchQuery },
+                    success: function (response) {
+                        // Обработка ответа от контроллера
+                        // Например, обновление части страницы
+                    },
+                    error: function (xhr, status, error) {
+                        // Обработка ошибки
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#propertyId').change(function () {
+                var price = $(this).find(':selected').data('price') + ' руб ';
+                $('#price').text(price);
+            });
+        });
+    </script>
+    <script>
+        //таймер
+        window.onload = function () {
+            var radios = document.getElementsByName('a');
+            var current = 0;
+            var interval = setInterval(function () {
+                current++;
+                if (current >= radios.length) {
+                    current = 0;
+                }
+                radios[current].checked = true;
+            }, 5000); // Перелистывание каждые 5 секунд
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.show-details-btn').click(function (e) {
+                e.preventDefault(); // Предотвращаем стандартное действие кнопки
+
+                $.ajax({
+                    url: '/Home/CheckLogin',
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.isAuthenticated) {
+                            // Если пользователь аутентифицирован, выполняем необходимые действия, например, добавление товара в корзину
+                            // В этом примере просто выводим сообщение
+                            alert('Пользователь аутентифицирован');
+                        } else {
+                            // Если пользователь не аутентифицирован, перенаправляем на страницу аутентификации
+                            window.location.href = result.redirectUrl;
+                        }
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('.show-details-btn').click(function (e) {
+                e.stopPropagation(); // Предотвращаем всплытие события до родительских элементов
+
+                var $currentInfo = $(this).closest('.product-card').find('.additional-info');
+                var $allInfo = $('.additional-info');
+
+                if (!$currentInfo.is(':visible')) {
+                    // Закрываем все открытые элементы
+                    $allInfo.not($currentInfo).slideUp();
+
+                    // Открываем текущий элемент
+                    $currentInfo.slideToggle();
+                }
+            });
+
+            $('.close').click(function (e) {
+                $(this).closest('.additional-info').slideUp();
+            });
+
+            $(document).click(function (e) {
+                if (!$(e.target).closest('.additional-info').length && !$(e.target).closest('.show-details-btn').length) {
+                    $('.additional-info').slideUp();
+                }
+            });
+        });
+    </script>
+}

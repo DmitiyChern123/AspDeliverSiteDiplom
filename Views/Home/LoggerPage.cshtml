@@ -1,0 +1,50 @@
+﻿@model LogsViewModel
+@{
+    <link rel="stylesheet" href="/css/table.css" />
+}
+
+    <h2>Log Messages</h2>
+    <form method="get">
+        <label for="date">Выбрать дату:</label>
+        <input type="date" id="date" name="date">
+
+        <label for="errorType">Выбрать тип ошибки:</label>
+        <select id="errorType" name="errorType">
+            <option value="">All</option>
+            <option value="Error">Error</option>
+            <option value="Warning">Warning</option>
+        <option value="Information">Warning</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <button type="submit">Search</button>
+    </form>
+    <p></p>
+    @if (Model.ErrorMessage != null)
+    {
+        <p>@Model.ErrorMessage</p>
+    }
+    else
+    {
+        <table  >
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Level</th>
+                    <th>Message</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model.logs)
+                {
+                    <tr>
+                        <td>@log["Timestamp"]</td>
+                        <td>@log["Level"]</td>
+                        <td>@log["MessageTemplate"]</td>
+                        <td>@log["Exception"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }

@@ -1,0 +1,161 @@
+﻿@model WebApplication1.Models.KorzinaViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+*@
+@{
+}
+@section Scripts {
+    <title>Оформление заказа</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=45227f56-d5a5-4cca-a40a-d41a8e261505&lang=ru_RU&width=-1&height=45" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js" integrity="sha512-6Jym48dWwVjfmvB0Hu3/4jn4TODd6uvkxdi9GNbBHwZ4nGcRxJUCaTkL3pVY6XUQABqFo3T58EMXFQztbjvAFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/css/Order.css" />
+    
+ 
+    <link rel="stylesheet" href="/css/Order.css" />
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        var myMap;
+        var fixedPosition = [56.84495958999723, 60.63911005278376]; // Фиксированная позиция
+
+        function init() {
+            myMap = new ymaps.Map("map", {
+                center: [56.84495958999723, 60.63911005278376], // Центр карты по умолчанию - Москва
+                zoom: 15
+            });
+
+            // Добавляем слушатель нажатия на карту
+            myMap.events.add('click', function (e) {
+                var coords = e.get('coords');
+                myMap.setCenter(coords); // Перемещаем центр карты на выбранную точку
+
+                // Получаем адрес выбранной точки
+                getAddress(coords).then(function (address) {
+                    // Устанавливаем полученный адрес в элемент input
+                    document.getElementById('address').value = address;
+
+                    // Проверка расстояния перед отправкой формы
+                    var distance = calculateDistance(coords, fixedPosition);
+                    if (distance <= 5000) {
+                        // Заполнение скрытых полей формы
+                        document.getElementById('latitude').value = coords[0];
+                        document.getElementById('longitude').value = coords[1];
+
+                        // Отправка формы
+                        //document.getElementById('mapForm').submit();
+                    } else {
+                        alert('Расстояние до нас больше 5км, к сожалению мы не доставляем так далеко...');
+                        document.getElementById('address').value = "";
+                    }
+                }).catch(function (error) {
+                    alert('Ошибка при определении адреса: ' + error);
+                });
+            });
+        }
+
+        // Функция для получения адреса по координатам
+        function getAddress(coords) {
+            return ymaps.geocode(coords).then(function (res) {
+                var firstGeoObject = res.geoObjects.get(0);
+                var address = firstGeoObject.getAddressLine();
+
+                // Ищем первую запятую и обрезаем строку
+                var commaIndex = address.indexOf(',');
+                if (commaIndex >= 0) {
+                    address = address.substring(commaIndex + 1);
+                }
+
+                return address;
+            });
+        }
+
+        // Функция для расчета расстояния между двумя точками на поверхности Земли
+        function calculateDistance(coords1, coords2) {
+            var R = 6371e3; // Радиус Земли в метрах
+            var lat1 = toRad(coords1[0]);
+            var lat2 = toRad(coords2[0]);
+            var deltaLat = toRad(coords2[0] - coords1[0]);
+            var deltaLon = toRad(coords2[1] - coords1[1]);
+
+            var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return R * c; // Расстояние в метрах
+        }
+
+        // Функция для перевода градусов в радианы
+        function toRad(value) {
+            return value * Math.PI / 180;
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#phone').inputmask('+7(999)999-99-99');
+        });
+    </script>
+}
+
+
+    
+    <div class="form-input-material">
+        <h1>Оформление заказа</h1>
+        <div class="container">
+
+        <div class="map-container">
+
+    <div id="map" ></div>
+        </div>
+        <div class="form-container">
+
+    @using (Html.BeginForm("SetLocation", "korzinas", FormMethod.Post, new { id = "mapForm" }))
+    {
+        @Html.AntiForgeryToken()
+       
+        <!--
+
+        <input type="text" id="addressInput" name="Address" value="@Model.Address" />
+        -->
+        <input type="hidden" id="latitude" name="Latitude" />
+        <input type="hidden" id="longitude" name="Longitude" />
+        <p>Адрес:</p>
+        <input type="text" id="address" name="Address" readonly="readonly" value="@Model.Address" />
+       <!--
+        <input type="text" id="addressDisplay" name="Address" value="@Model.Address" /> 
+
+       -->
+        <p>Почта:</p>
+        <input type="text" id="email" name="Email" value="@Model.Email" />
+        @Html.ValidationMessageFor(model => model.Email)
+        <p>Телефон:</p>
+
+                    <input type="text" value="@Model.PhoneNumber" id="phone" name="PhoneNumber" />
+        @Html.ValidationMessageFor(model => model.PhoneNumber)
+        <p>Способ оплаты:</p>
+        <select name="PaymentType">
+            <option value="">- - -</option>
+            <option value="наличные">наличные</option>
+            <option value="без нал">без нал</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.PaymentType)
+        <div style="display:flex; margin-top:10px;justify-items:center;">
+        <h2>Приборы нужны? </h2>
+        @Html.CheckBoxFor(m => m.Is_need_devices)
+
+        </div>
+                    <p>Текущие бонусы: @Model.cur_bonuses</p>
+                    <p>Списать бонусы:</p>
+                    <input type="number" value="@Model.rem_bonuses" name="rem_bonuses" min="0" max="@Model.cur_bonuses" />
+                    @Html.ValidationMessageFor(model => model.rem_bonuses)
+                    <p>Сумма заказа: @Model.order_sum руб</p>
+                    <button type="submit" class="button1">Оформить заказ</button>
+
+    }
+        </div>
+        </div>
+   </div>

@@ -1,0 +1,111 @@
+﻿@using WebApplication1.Entities2;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApplication1</title>
+    <link rel="stylesheet" href="/css/mainheader.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   
+    <link rel="stylesheet" href="~/WebApplication1.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="fixed-top">
+        <div id="cart-info" style="display: none;">
+            @if (ViewBag.CartInfo != null && ViewBag.CartInfo is IEnumerable<Korzina>)
+            {
+                @foreach (Korzina k in @ViewBag.CartInfo)
+                {
+                    <p>@k.ProductType.Name X @k.Count шт</p>
+                }
+            }
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav d-flex align-items-center flex-nowrap">
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Home">
+                                <img src="~/images/icons/logo3.png" style="height: 50px; width: auto;" />
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="get" role="search" class="search-form" action="@Url.Action("Index", "Home")">
+                                <input type="text" name="searchQuery" placeholder="Поиск..." class="search-input" value="@ViewBag.SearchQuery" />
+                                <input type="submit" value="ок" class="search-submit" />
+                            </form>
+                        </li>
+                        <li class="nav-item glow">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Меню</a>
+                        </li>
+                        <li class="nav-item glow">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">О нас</a>
+                        </li>
+                        @if (User.IsInRole("manager"))
+                        {
+                            <li class="nav-item glow">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="OrderEdit">Редактирование Заказов</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav d-flex align-items-center ml-auto flex-nowrap">
+                        @if (!User.IsInRole("user"))
+                        {
+                            <li class="nav-item glow">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accaunt" asp-action="Index">Войти в Аккаунт</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("user"))
+                        {
+                            <li class="nav-item glow">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accaunt" asp-action="Profile">профиль</a>
+                            </li>
+                            <li id="Korzina-link" class="nav-item glow">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Korzinas" asp-action="Index">корзина</a>
+                            </li>
+                            <li class="nav-item glow">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout"><img src="https://www.vhv.rs/file/max/4/44924_logout-icon-png.png" style="height:100%;width:55%;" /></a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+   
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(window).scroll(function () {
+            if ($(document).scrollTop() > 50) {
+                $('header').addClass('scrolled');
+            } else {
+                $('header').removeClass('scrolled');
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#Korzina-link').hover(function () {
+                $('#cart-info').show();
+            }, function () {
+                $('#cart-info').hide();
+            });
+        });
+    </script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

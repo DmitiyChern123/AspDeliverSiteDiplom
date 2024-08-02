@@ -1,0 +1,115 @@
+﻿@model EditTypesViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+*@
+@{
+    <link rel="stylesheet" href="/css/table.css" />
+}
+@section Scripts {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Функция для перепроверки позиций и зачеркивания
+            function strikeThroughProducts() {
+                $('input[type="checkbox"]').each(function () {
+                    var isDeleted = $(this).is(':checked');
+                    var productRow = $(this).closest('tr');
+                    if (isDeleted) {
+                        productRow.find('p').addClass('deleted');
+                    } else {
+                        productRow.find('p').removeClass('deleted');
+                    }
+                });
+            }
+
+            // Обработчик изменения состояния чекбокса
+            $('input[type="checkbox"]').change(function () {
+                strikeThroughProducts();
+            });
+
+            // Вызов функции при загрузке страницы
+            strikeThroughProducts();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('input[type="checkbox"]').change(function () {
+                var isDeleted = $(this).is(':checked');
+                var productId = $(this).data('productid');
+                var productTypeId = $(this).data('producttypeid');
+
+                $.ajax({
+                    url: '@Url.Action("UpdateProductType", "Home")',
+                    type: 'POST',
+                    data: { productId: productId, productTypeId: productTypeId, isDeleted: isDeleted },
+                    success: function (result) {
+                        // Обработка успешного ответа сервера
+                    },
+                    error: function (xhr, status, error) {
+                        // Обработка ошибки
+                    }
+                });
+            });
+        });
+    </script>
+}
+<table>
+    <tr>
+        <td>
+            <p>name</p>
+        </td>
+        <td>
+            <p>price</p>
+        </td>
+        <td>
+            <p>Скрыть</p>
+        </td>
+    </tr>
+    @for (int i = 0; i < Model.types.Count; i++)
+    {
+        <tr>
+            <td>
+                <p class="@(Model.types[i].Is_delated? "deleted" : "")">@Model.types[i].Name</p>
+            </td>
+            <td>
+                <p>@Html.DisplayFor(m => m.types[i].Price)</p>
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.types[i].Is_delated, new { data_productid = Model.types[i].ProductId, data_producttypeid = Model.types[i].Id })
+            </td>
+        </tr>
+    }
+</table>
+@using (Html.BeginForm("AddProductType", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Добавить Тип Продукта</h4>
+        <hr />
+        <input type="hidden" asp-for="productid" value="@Model.productid">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.newtype.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.newtype.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newtype.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.newtype.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.newtype.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.newtype.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+       
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Добавить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

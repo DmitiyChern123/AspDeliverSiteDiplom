@@ -1,0 +1,117 @@
+﻿@model WebApplication1.Models.KorzinaViewModel
+
+@{
+    <link rel="stylesheet" href="/css/table.css" />
+    ViewData["Title"] = "Index";
+}
+
+<h1>Корзина:</h1>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function increaseValue(button) {
+            var input = button.parentElement.querySelector('input[type="number"]');
+            input.stepUp();
+            input.dispatchEvent(new Event('change'));
+        }
+
+        function decreaseValue(button) {
+            var input = button.parentElement.querySelector('input[type="number"]');
+            input.stepDown();
+            input.dispatchEvent(new Event('change'));
+        }
+
+        $(document).ready(function () {
+            $('form[id^="updateQuantityForm-"]').each(function () {
+                var form = $(this);
+                var submitButton = form.find('input[type="submit"]');
+                var newCountInput = form.find('input[name="newCount"]');
+                var oldCountInput = form.find('input[name="oldCount"]');
+
+                // Скрываем кнопку подтверждения по умолчанию
+                submitButton.hide();
+
+                // Проверяем, когда изменяется значение в input
+                newCountInput.on('change', function () {
+                    // Если значения не равны, показываем кнопку
+                    if (newCountInput.val() !== oldCountInput.val()) {
+                        submitButton.show();
+                    } else {
+                        submitButton.hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Продукт</p>
+            </th>
+            <th>
+                <p>Цена</p>
+            </th>
+            <th>
+               <p>доп инфо</p>
+            </th>
+            <th>
+                <p>Количество</p>
+            </th>
+              <th>
+                <p>Редактирование</p>
+            </th> 
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.korzinas)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductType.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductType.Name)
+                </td>
+                <td>
+                    <p>
+                        @item.Count
+                    </p>
+                </td>
+                <td>
+                    @using (Html.BeginForm("UpdateQuantity", "Korzinas", FormMethod.Post, new { id = "updateQuantityForm-" + item.Id }))
+                    {
+                        <div class="number">
+                            <button class="number-minus" type="button" onclick="decreaseValue(this)">-</button>
+                            <input id="newCount-@item.Id" name="newCount" value="@item.Count" type="number" min="1" max="10"  readonly>
+                            <button class="number-plus" type="button" onclick="increaseValue(this)">+</button>
+                        </div>
+                        <input type="hidden"  id="oldCount-@item.Id" name="oldCount" value="@item.Count" />
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="submit" class="btn-sub" id="submitButton-@item.Id" value="✔" />
+                        @Html.ActionLink("✕", "MinusProduct", "Korzinas", new { Korid = item.Id }, null)
+                       
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (Model.korzinas != null && Model.korzinas.Count >0)
+{
+    <h1>Cумма заказа: @Model.order_sum руб</h1>
+    <a class="button1" asp-action="СreateOrder">Оформить заказ</a>
+}
+else
+{
+    <h1>Нет добавленного товара</h1>
+}
+

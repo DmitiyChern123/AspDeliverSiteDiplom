@@ -1,0 +1,2 @@
+{"Timestamp":"2024-07-29T15:35:50.3395842+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"a6ff4cbca36ecc757a4108741f5b48f2","SpanId":"a9de3a0faf39384f"}
+{"Timestamp":"2024-07-29T18:30:00.2137166+05:00","Level":"Information","MessageTemplate":"Пользователь test успешно вошел в систему в систему","TraceId":"b14617d6fe455f38765330ed84997f06","SpanId":"8e41d457efb62132"}
